@@ -2,7 +2,7 @@
 title: "Understanding Logistic Regression from Scratch"
 author: "Jun"
 date: "Dec 29, 2019"
-output: html_document
+output: rmarkdown::github_document
 ---
 
 ## Introduction
