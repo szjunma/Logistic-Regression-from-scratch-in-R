@@ -3,7 +3,7 @@ library(dplyr)
 
 
 N <- 200 # number of points per class
-D <- 2 # dimensionality, we use 2D data for easy visulization
+D <- 2 # dimensionality, we use 2D data for easy visualization
 K <- 2 # number of classes, binary for logistic regression
 X <- data.frame() # data matrix (each row = single example, can view as xy coordinates)
 y <- data.frame() # class labels
@@ -24,15 +24,20 @@ for (j in (1:K)){
 data <- cbind(X,y)
 colnames(data) <- c(colnames(X), 'label')
 
+# create dir images
+dir.create(file.path('.', 'images'), showWarnings = FALSE)
 
 # lets visualize the data:
-ggplot(data) + geom_point(aes(x=x1, y=x2, color = as.character(label)), size = 2) + 
+data_plot <- ggplot(data) + geom_point(aes(x=x1, y=x2, color = as.character(label)), size = 2) + 
   scale_colour_discrete(name  ="Label") + 
   ylim(0, 3) + coord_fixed(ratio = 1) +
   ggtitle('Data to be classified') +
   theme_bw(base_size = 12) +
   theme(legend.position=c(0.85, 0.87))
 
+png(file.path('images', 'data_plot.png'))
+print(data_plot)
+dev.off()
 
 #sigmoid function, inverse of logit
 sigmoid <- function(z){1/(1+exp(-z))}
@@ -97,9 +102,13 @@ Z <- logisticPred(probZ)
 gridPred = cbind(grid, Z)
 
 # decision boundary visualization
-ggplot() +   geom_point(data = data, aes(x=x1, y=x2, color = as.character(label)), size = 2, show.legend = F) + 
+p <- ggplot() + geom_point(data = data, aes(x=x1, y=x2, color = as.character(label)), size = 2, show.legend = F) + 
   geom_tile(data = gridPred, aes(x = grid[, 1],y = grid[, 2], fill=as.character(Z)), alpha = 0.3, show.legend = F)+ 
   ylim(0, 3) +
   ggtitle('Decision Boundary for Logistic Regression') +
   coord_fixed(ratio = 1) +
   theme_bw(base_size = 12) 
+
+png(file.path('images', 'logistic_regression.png'))
+print(p)
+dev.off()
